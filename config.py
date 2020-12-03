@@ -2,7 +2,9 @@
 1、需要先初始化python环境:
 - pip install requirements.txt
 2、对python的环境执行mock操作
-3、配合java环境
+3、对python执行过程中的资源进行配置
+- 字体
+4、配合java环境
 """
 import shutil
 import sys
@@ -53,6 +55,23 @@ def mock(links: Dict):
             print(f"[INFO]:The file '{dst}' was replaced successfully.")
 
 
+# 对python执行过程中的资源进行配置
+def resources():
+    this_dir = os.path.abspath(os.path.dirname(os.path.abspath(__file__)))
+    # 复制字体
+    fonts_dir = os.path.join(this_dir, 'resources/fonts')
+    font_suffixes = ['.ttf', '.otf']
+    for file in os.listdir(fonts_dir):
+        if os.path.splitext(file)[-1] in font_suffixes:
+            src_file = os.path.join(fonts_dir, file)
+            dst_file = os.path.join('/tmp', file)
+            # 复制, 如果存在, 则需要先删除
+            if os.path.isfile(file):
+                os.remove(file)
+            shutil.copyfile(src_file, dst_file)
+    print("[INFO]:Font resource configured successfully.")
+
+
 # 配合java环境
 def adapt_java():
     # setting:
@@ -60,20 +79,10 @@ def adapt_java():
     java_cwd_dir = '/opt'
     this_dir = os.path.abspath(os.path.dirname(os.path.abspath(__file__)))
 
-    # 复制字体
-    fonts_dir = os.path.join(this_dir, 'resources/fonts')
-    font_suffixes = ['.ttf', '.otf']
-    for file in os.listdir(fonts_dir):
-        if os.path.splitext(file)[-1] in font_suffixes:
-            src_file = os.path.join(fonts_dir, file)
-            dst_file = os.path.join(java_cwd_dir, file)
-            # 复制, 如果存在, 则需要先删除
-            if os.path.isfile(file):
-                os.remove(file)
-            shutil.copyfile(src_file, dst_file)
-    print("[INFO]:Adapting to Java successfully.")
 
 # 执行mock函数
 mock(mock_file_links)
+# 对python执行过程中的资源进行配置
+resources()
 # 配合java环境
 adapt_java()

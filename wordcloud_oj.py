@@ -10,7 +10,7 @@ from typing import Dict, List
 
 def review_word_cloud(code: str, answer: Dict, scores: Dict, match: float = 1.0, debug: bool = False):
     # 将code写入文件
-    tmp_fp, tmp_file_name = mkstemp(suffix=".py", dir='.', text=True)
+    tmp_fp, tmp_file_name = mkstemp(suffix=".py", dir='/tmp', text=True)
     with open(tmp_file_name, 'w') as f:
         f.write(code)
     if debug:
@@ -23,7 +23,8 @@ def review_word_cloud(code: str, answer: Dict, scores: Dict, match: float = 1.0,
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        close_fds=True
+        close_fds=True,
+        cwd='/tmp/'
     )
 
     # 评测词云，打分

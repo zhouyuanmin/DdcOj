@@ -13,6 +13,12 @@ from typing import Dict
 mock_file_links = {
     # mock函数:scatter(散点图评测)
     '_axes_copy.py': 'matplotlib/axes/_axes.py',
+    # 覆盖show方法
+    'pyplot_copy.py': 'matplotlib/pyplot.py',
+    # mock函数:(词云评测)
+    'code_wc.py': 'wordcloud/wordcloud.py',
+    # 覆盖show方法
+    'image_show.py': 'PIL/Image.py',
 }
 
 
@@ -27,7 +33,7 @@ def mock(links: Dict):
             packages_dir = path
             break
     else:
-        raise FileNotFoundError("Can't find site packages path")
+        raise FileNotFoundError("Can't find site packages path.")
 
     # 获取存放mock文件的目录路径
     this_dir = os.path.abspath(os.path.dirname(os.path.abspath(__file__)))
@@ -44,7 +50,7 @@ def mock(links: Dict):
             # 先删除，再复制
             os.remove(dst_file)
             shutil.copyfile(src_file, dst_file)
-            print(f"INFO: The file '{dst}' was replaced successfully")
+            print(f"[INFO]:The file '{dst}' was replaced successfully.")
 
 
 # 配合java环境
@@ -65,8 +71,9 @@ def adapt_java():
             if os.path.isfile(file):
                 os.remove(file)
             shutil.copyfile(src_file, dst_file)
+    print("[INFO]:Adapting to Java successfully.")
 
 # 执行mock函数
-# mock(mock_file_links)
+mock(mock_file_links)
 # 配合java环境
-# adapt_java()
+adapt_java()
